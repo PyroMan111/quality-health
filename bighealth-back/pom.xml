@@ -104,11 +104,11 @@
         </dependency>
 
         <!--引入redis的封装框架redission-->
-        <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson-spring-boot-starter</artifactId>
-            <version>3.10.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.redisson</groupId>-->
+<!--            <artifactId>redisson-spring-boot-starter</artifactId>-->
+<!--            <version>3.10.0</version>-->
+<!--        </dependency>-->
 
         <!-- 切面编程启动器 -->
         <dependency>
@@ -120,6 +120,15 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+
+        <!--热部署依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <!--可选依赖；表示当前依赖只在当前项目有效，比如别人依赖了我，不会传递依赖到其他项目。-->
+            <!--应用： 比如导入的包是公司封装的组件，要保密。可以设置可选依赖。-->
+            <optional>true</optional>
         </dependency>
 
     </dependencies>

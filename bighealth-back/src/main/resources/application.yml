@@ -19,6 +19,14 @@ spring:
     date-format: yyyy-MM-dd
     time-zone: GMT+8
     default-property-inclusion: non_null # 对象属性为NULL，就不把对象属性转换为JSON格式
+
+
+  redis:
+    host: localhost
+    port: 6379
+
+
+
 # MyBatis-Plus 配置
 mybatis-plus:
   configuration:
