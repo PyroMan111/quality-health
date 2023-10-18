@@ -1,0 +1,25 @@
+server:
+  port: 9010
+spring:
+  datasource:
+    # druid 连接池的配置
+    druid:
+      url: jdbc:mysql://localhost:3306/bighealth?characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+      username: root
+      password: root
+      driver-class-name: com.mysql.jdbc.Driver
+      initial-size: 5 # 初始连接大小
+      max-active: 50 # 最大连接数
+      max-wait: 60000 # 获取连接的最大等待时间1分钟
+      time-between-eviction-runs-millis: 60000 # 间隔1分钟检测空闲连接
+      min-evictable-idle-time-millis: 300000 # 空闲时间超过5分钟的连接，会被关闭
+      pool-prepared-statements: true # 开启预编译语句的缓存
+      max-pool-prepared-statement-per-connection-size: 50 # 允许缓存50个连接
+  jackson:
+    date-format: yyyy-MM-dd
+    time-zone: GMT+8
+    default-property-inclusion: non_null # 对象属性为NULL，就不把对象属性转换为JSON格式
+# MyBatis-Plus 配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 打印MP执行日志
