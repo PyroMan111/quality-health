@@ -2,6 +2,10 @@ package com.woniuxy.cxy.service;
 
 import com.woniuxy.cxy.entity.Commodity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.woniuxy.cxy.vo.CommodityAdvancedQueryVo;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -13,4 +17,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ICommodityService extends IService<Commodity> {
 
+    List<Commodity> top10List();
+
+    List<Commodity> AdvancedQuery(CommodityAdvancedQueryVo advancedQueryVo);
 }

@@ -2,4 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.woniuxy.cxy.mapper.CategoryMapper">
 
+
+    <select id="QueryCategoryByCondition" resultType="com.woniuxy.cxy.entity.Category">
+        SELECT * FROM h_category
+        <where>
+            <if test="condition.categoryName!=null and condition.categoryName!=''">
+                and category_name = categoryName
+            </if>
+            <if test="condition.beginDate!=null and condition.beginDate!=''">
+                and create_time &gt;= #{condition.beginDate}
+            </if>
+            <if test="condition.endDate!=null and condition.endDate!=''">
+                and create_time &lt;= #{condition.endDate}
+            </if>
+        </where>
+    </select>
 </mapper>
