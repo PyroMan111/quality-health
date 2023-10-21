@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -66,6 +67,20 @@ public class CommodityController {
     public String toSearch(String keyword, Model model) {
         model.addAttribute("keyword", keyword);
         return "search";
+    }
+
+
+    /**
+     * 首页搜索
+     */
+    @GetMapping("/search")
+    public Result search(
+            String keyword,
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "5") Integer pageSize) {
+// 调用service查询索引库
+        Map<String, Object> result = commodityService.search(keyword, pageNum, pageSize);
+        return Result.ok(result);
     }
 
 }

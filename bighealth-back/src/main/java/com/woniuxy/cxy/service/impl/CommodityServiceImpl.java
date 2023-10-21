@@ -9,15 +9,24 @@ import com.woniuxy.cxy.model.vo.PageVo;
 import com.woniuxy.cxy.service.ICommodityService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.woniuxy.cxy.vo.CommodityAdvancedQueryVo;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author 作者
@@ -56,7 +65,7 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
     }
 
     @Override
-    public List<Commodity> AdvancedQuery(CommodityAdvancedQueryVo advancedQueryVo){
+    public List<Commodity> AdvancedQuery(CommodityAdvancedQueryVo advancedQueryVo) {
         LambdaQueryWrapper<Commodity> wrapper = new LambdaQueryWrapper<>();
 
 
@@ -92,6 +101,42 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
 
         Page<Commodity> page = baseMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
         return new PageVo(page.getRecords(), page.getTotal());
+    }
+
+    @Override
+    public Map<String, Object> search(String keyword, Integer pageNum, Integer pageSize) {
+        // 条件构造器
+        NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
+        builder.withQuery(QueryBuilders.multiMatchQuery(keyword, "name", "title", "subhead", "details"));
+        builder.withPageable(PageRequest.of(pageNum - 1, pageSize));
+        // 设置高亮
+
+        HighlightBuilder.Field[] fields = new HighlightBuilder.Field[1];
+        fields[0] = new HighlightBuilder.Field("name")
+                .preTags("<span style='background-color:Crimson; color:White'>")
+                .postTags("</span>");
+        builder.withHighlightFields(fields);
+        // 执行搜索
+        SearchHits<Commodity> searchHits = elasticsearchRestTemplate.search(builder.build(), Commodity.class);
+        // 处理结果
+        List<Commodity> commodityList = searchHits.getSearchHits().stream().map(searchHit -> {
+            Commodity commodity = searchHit.getContent();
+            // 获取高亮字段
+            List<String> stringList = searchHit.getHighlightField("name");
+            if (!CollectionUtils.isEmpty(stringList)) {
+                StringBuffer sb = new StringBuffer();
+                for (String str : stringList) {
+                    sb.append(str);
+                }
+                commodity.setName(sb.toString()); // 设置高亮结果
+            }
+            return commodity;
+        }).collect(Collectors.toList());
+        // 返回结果
+        Map<String, Object> map = new HashMap<>();
+        map.put("list", commodityList);
+        map.put("total", searchHits.getTotalHits());
+        return map;
     }
 
 }
