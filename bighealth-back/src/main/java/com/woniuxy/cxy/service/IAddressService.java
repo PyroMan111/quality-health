@@ -2,6 +2,9 @@ package com.woniuxy.cxy.service;
 
 import com.woniuxy.cxy.entity.Address;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.woniuxy.cxy.vo.AddressVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IAddressService extends IService<Address> {
 
+    List<Address> findAddressByUserId(int userId);
+
+    List<AddressVo> findConsigneeAddress();
 }

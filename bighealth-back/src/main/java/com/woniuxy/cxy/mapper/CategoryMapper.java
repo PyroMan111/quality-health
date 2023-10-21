@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author 作者
@@ -21,8 +21,8 @@ import java.util.Map;
 @Mapper
 public interface CategoryMapper extends BaseMapper<Category> {
 
-    List<Category> QueryCategoryByCondition (@Param("condition") Map<String, Object> condition);
+    List<Category> QueryCategoryByCondition(@Param("condition") Map<String, Object> condition);
 
-
-
+    @Select("SELECT id,category_name FROM h_category")
+    List<Category> findAllCategoryName();
 }

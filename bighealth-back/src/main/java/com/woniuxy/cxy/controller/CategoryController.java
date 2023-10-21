@@ -1,6 +1,8 @@
 package com.woniuxy.cxy.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.pagehelper.PageInfo;
 import com.woniuxy.cxy.common.Result;
 import com.woniuxy.cxy.entity.Category;
 import com.woniuxy.cxy.service.ICategoryService;
@@ -19,25 +21,49 @@ import java.util.*;
  * @author 作者
  * @since 2023-10-18
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
     @Autowired
     private ICategoryService categoryService;
 
-    @GetMapping("/search")
-    public Result list(@RequestBody CategoryQueryVo categoryQueryVo,Integer pageNum, Integer pageSize) {
-        Map<String, Object> condition = new HashMap<>();
+    //    @PostMapping("/search")
+//    public Result list(@RequestBody CategoryQueryVo categoryQueryVo, Integer pageNum, Integer pageSize) {
+//        Map<String, Object> condition = new HashMap<>();
+//
+//        condition.put("parentCategoryId", categoryQueryVo.getParentCategoryId());
+//
+//        condition.put("beginDate", categoryQueryVo.getBeginDate());
+//
+//        condition.put("endDate", categoryQueryVo.getEndDate());
+//
+//        IPage<Category> page = categoryService.search(condition, pageNum, pageSize);
+//
+//        return Result.ok(page);
+//    }
+    @RequestMapping("findByCondition")
+    public PageInfo<Category> findByCondition(@RequestBody Map<String, Object> condition) {
+        Integer pageNum = (Integer) condition.get("page");
+        Integer pageSize = (Integer) condition.get("size");
 
-        condition.put("parentCategoryId", categoryQueryVo.getParentCategoryId());
+        System.out.println("查询条件：" + condition);
+        PageInfo<Category> pageInfo =  categoryService.findByCondition(condition, pageNum, pageSize);
+        return pageInfo;
+    }
 
-        condition.put("beginDate", categoryQueryVo.getBeginDate());
 
-        condition.put("endDate", categoryQueryVo.getEndDate());
-
-        IPage<Category> page = categoryService.search(condition, pageNum, pageSize);
-
+    /**
+     * 查询所有商品类别
+     */
+    @GetMapping("/findAll")
+    public Result findCategories(@RequestParam(defaultValue = "1") Integer pageNum,
+                                 @RequestParam(defaultValue = "5") Integer pageSize) {
+//        List<Category> list = categoryService.getBaseMapper().selectList(null);
+//        List<Category> list = categoryService.findAll();
+        Page page = categoryService.findAll(pageNum, pageSize);
         return Result.ok(page);
+//        return null;
     }
 
 
@@ -47,9 +73,18 @@ public class CategoryController {
     @PostMapping("/add")
     public Result save(@RequestBody Category category) {
 
-        return null;
+
+        return Result.ok(categoryService.saveOrUpdate(category));
     }
 
+    /**
+     * 查询所有品类（id和类名）
+     */
+    @GetMapping("/findAllCategoryName")
+    public Result findAllCategory() {
+        List list = categoryService.findAllCategoryName();
+        return Result.ok(list);
+    }
 
 
 }

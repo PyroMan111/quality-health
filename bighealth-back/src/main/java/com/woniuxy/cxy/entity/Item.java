@@ -1,5 +1,6 @@
 package com.woniuxy.cxy.entity;
 
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -45,6 +46,7 @@ public class Item implements Serializable {
 
     private Date updateTime;
 
+    @TableLogic
     private Integer deleteFlag;
 
 

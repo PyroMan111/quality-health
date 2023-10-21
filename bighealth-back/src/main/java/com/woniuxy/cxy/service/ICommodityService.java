@@ -1,7 +1,9 @@
 package com.woniuxy.cxy.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.woniuxy.cxy.entity.Commodity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.woniuxy.cxy.model.vo.PageVo;
 import com.woniuxy.cxy.vo.CommodityAdvancedQueryVo;
 
 import java.util.List;
@@ -19,5 +21,10 @@ public interface ICommodityService extends IService<Commodity> {
 
     List<Commodity> top10List();
 
+
+    PageVo<Commodity> findAll(Integer pageNum, Integer pageSize);
+
     List<Commodity> AdvancedQuery(CommodityAdvancedQueryVo advancedQueryVo);
+
+    PageVo<Commodity> findAllCommodityByName(Integer pageNum, Integer pageSize, String name);
 }

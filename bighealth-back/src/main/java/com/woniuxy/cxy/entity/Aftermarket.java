@@ -1,5 +1,6 @@
 package com.woniuxy.cxy.entity;
 
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
@@ -41,6 +42,7 @@ public class Aftermarket implements Serializable {
 
     private Date updateTime;
 
+    @TableLogic
     private Integer deleteFlag;
 
 

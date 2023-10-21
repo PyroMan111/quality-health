@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.woniuxy.cxy.entity.Commodity;
 import com.woniuxy.cxy.mapper.CommodityMapper;
+import com.woniuxy.cxy.model.vo.PageVo;
 import com.woniuxy.cxy.service.ICommodityService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.woniuxy.cxy.vo.CommodityAdvancedQueryVo;
@@ -48,8 +49,16 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
     }
 
     @Override
+    public PageVo<Commodity> findAll(Integer pageNum, Integer pageSize) {
+        LambdaQueryWrapper<Commodity> wrapper = Wrappers.lambdaQuery(Commodity.class);
+        Page<Commodity> page = baseMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+        return new PageVo(page.getRecords(), page.getTotal());
+    }
+
+    @Override
     public List<Commodity> AdvancedQuery(CommodityAdvancedQueryVo advancedQueryVo){
         LambdaQueryWrapper<Commodity> wrapper = new LambdaQueryWrapper<>();
+
 
         // 设置查询条件  
         if (advancedQueryVo.getName() != null) {
@@ -73,6 +82,16 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
         }
 
         return commodityMapper.selectList(wrapper);
+    }
+
+    @Override
+    public PageVo<Commodity> findAllCommodityByName(Integer pageNum, Integer pageSize, String name) {
+        LambdaQueryWrapper<Commodity> wrapper = Wrappers.lambdaQuery(Commodity.class);
+        // 在这里可以根据需要添加查询条件，比如wrapper.like(StringUtils.hasText(name), Commodity::getName, name);
+        wrapper.like(Commodity::getName, name);
+
+        Page<Commodity> page = baseMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+        return new PageVo(page.getRecords(), page.getTotal());
     }
 
 }

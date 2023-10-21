@@ -7,14 +7,15 @@
         SELECT * FROM h_category
         <where>
             <if test="condition.categoryName!=null and condition.categoryName!=''">
-                and category_name = categoryName
+                and category_name = #{condition.categoryName}
             </if>
-            <if test="condition.beginDate!=null and condition.beginDate!=''">
-                and create_time &gt;= #{condition.beginDate}
+            <if test="condition.begin!=null and condition.begin!=''">
+                and create_time &gt;= #{condition.begin}
             </if>
-            <if test="condition.endDate!=null and condition.endDate!=''">
-                and create_time &lt;= #{condition.endDate}
+            <if test="condition.end!=null and condition.end!=''">
+                and create_time &lt;= #{condition.end}
             </if>
         </where>
     </select>
+
 </mapper>
