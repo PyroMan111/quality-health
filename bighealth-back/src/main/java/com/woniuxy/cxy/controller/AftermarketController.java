@@ -1,5 +1,6 @@
 package com.woniuxy.cxy.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 作者
  * @since 2023-10-18
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/aftermarket")
 public class AftermarketController {

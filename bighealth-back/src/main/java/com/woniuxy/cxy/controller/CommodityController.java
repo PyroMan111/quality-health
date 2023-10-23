@@ -10,6 +10,7 @@ import com.woniuxy.cxy.service.ICategoryService;
 import com.woniuxy.cxy.service.ICommodityService;
 import com.woniuxy.cxy.vo.CommodityAdvancedQueryVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.ui.Model;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
  * @author 作者
  * @since 2023-10-18
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/commodity")
 public class CommodityController {
@@ -41,6 +43,7 @@ public class CommodityController {
      * 首页查询商品Top5
      * 改造：从Redis中获取zset集合中数据，按照分值升获取。
      */
+    @Cacheable(cacheNames = "top5List")
     @GetMapping("/top5List")
     public Result top5List() {
         // 参数1：zset的key；参数2：分值的范围（开始）；参数3：分值的范围（结束）
@@ -59,17 +62,18 @@ public class CommodityController {
     }
 
 
-    @RequestMapping("AdvancedQuery")
+    @Cacheable(cacheNames = "historical_advanced_query")
+    @PostMapping("AdvancedQuery")
     public Result findAll(@RequestParam(defaultValue = "1") Integer pageNum,
                           @RequestParam(defaultValue = "5") Integer pageSize, @RequestBody CommodityAdvancedQueryVo advancedQuery) {
         PageVo page = commodityService.AdvancedQuery(pageNum,
                 pageSize, advancedQuery);
         return Result.ok(page);
-
     }
 
 
     @GetMapping("/findAll")
+    @Cacheable(cacheNames = "full_commodity_list")
     public Result findAll(@RequestParam(defaultValue = "1") Integer pageNum,
                           @RequestParam(defaultValue = "5") Integer pageSize) {
         PageVo page = commodityService.findAll(pageNum, pageSize);
@@ -84,6 +88,7 @@ public class CommodityController {
      * 商品名模糊查询
      */
     @GetMapping("/findAllCommodityByName")
+    @Cacheable(cacheNames = "categoryName_list")
     public Result findAll(
             @RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "5") Integer pageSize,
@@ -110,6 +115,7 @@ public class CommodityController {
      * 首页搜索
      */
     @GetMapping("/search")
+    @Cacheable(cacheNames = "searched_keywords")
     public Result search(
             String keyword,
             @RequestParam(defaultValue = "1") Integer pageNum,

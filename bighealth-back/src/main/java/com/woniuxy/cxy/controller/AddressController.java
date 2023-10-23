@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
  * @author 作者
  * @since 2023-10-18
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/address")
 public class AddressController {

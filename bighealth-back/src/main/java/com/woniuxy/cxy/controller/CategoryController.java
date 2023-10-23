@@ -8,6 +8,8 @@ import com.woniuxy.cxy.entity.Category;
 import com.woniuxy.cxy.service.ICategoryService;
 import com.woniuxy.cxy.vo.CategoryQueryVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -28,7 +30,7 @@ public class CategoryController {
     @Autowired
     private ICategoryService categoryService;
 
-    //    @PostMapping("/search")
+//        @PostMapping("/search")
 //    public Result list(@RequestBody CategoryQueryVo categoryQueryVo, Integer pageNum, Integer pageSize) {
 //        Map<String, Object> condition = new HashMap<>();
 //
@@ -71,16 +73,19 @@ public class CategoryController {
      * 新增
      */
     @PostMapping("/add")
-    public Result save(@RequestBody Category category) {
-
+    @CacheEvict(cacheNames = "categories",allEntries = true)
+    public Result saveOrUpdate(@RequestBody Category category) {
 
         return Result.ok(categoryService.saveOrUpdate(category));
     }
+    /**添加或修改*/
+
 
     /**
      * 查询所有品类（id和类名）
      */
     @GetMapping("/findAllCategoryName")
+    @Cacheable(cacheNames = "categoryName_list")
     public Result findAllCategory() {
         List list = categoryService.findCategoryNames();
         return Result.ok(list);

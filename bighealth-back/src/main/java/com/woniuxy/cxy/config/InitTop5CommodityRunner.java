@@ -55,6 +55,8 @@ public class InitTop5CommodityRunner implements CommandLineRunner {
         commodityList.forEach(commodity -> {
             redisTemplate.opsForZSet().add(RedisConstant.COMMODITY_LIST, commodity, commodity.getSequence());
 
+            redisTemplate.opsForHash().put("stock", commodity.getId().toString(), commodity.getStock());
+
         });
     }
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ApifoxUploaderProjectSetting">
+    <option name="apifoxAccessToken" value="APS-RcPNL7Cy4vaqYXUlAP166chV4lUAULKM" />
+    <option name="apifoxApiOverwriteMode" value="智能合并" />
+    <option name="apifoxProjectIds">
+      <array>
+        <option value="# ModuleName:ProjectID" />
+        <option value="ModuleName:3276039" />
+        <option value="p3-w1-d1-SpringBt:3276039" />
+        <option value="book-sys-portal:3328197" />
+        <option value="book-sys-email:3328197" />
+        <option value="book-system:3328197" />
+        <option value="bighealth-back:3443950" />
+      </array>
+    </option>
+    <option name="yapiTokens" value="" />
+  </component>
+</project>
