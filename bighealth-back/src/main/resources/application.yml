@@ -17,15 +17,17 @@ spring:
       pool-prepared-statements: true # 开启预编译语句的缓存
       max-pool-prepared-statement-per-connection-size: 50 # 允许缓存50个连接
   jackson:
+    charset: UTF-8
     date-format: yyyy-MM-dd
     time-zone: GMT+8
     default-property-inclusion: non_null # 对象属性为NULL，就不把对象属性转换为JSON格式
 
 
   redis:
-    host: localhost
-#    host: 8.134.212.240
+#    host: localhost
+    host: 8.134.212.240
     port: 6379
+
 
   elasticsearch:
     rest:

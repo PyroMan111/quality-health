@@ -88,7 +88,7 @@ public class CommodityController {
      * 商品名模糊查询
      */
     @GetMapping("/findAllCommodityByName")
-    @Cacheable(cacheNames = "categoryName_list")
+    @Cacheable(cacheNames = "commodity_list")
     public Result findAll(
             @RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "5") Integer pageSize,

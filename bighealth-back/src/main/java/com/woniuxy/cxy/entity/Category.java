@@ -8,10 +8,12 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -49,5 +51,18 @@ public class Category implements Serializable {
     @TableLogic
     private Integer deleteFlag;
 
-
+//    @Override
+//    public String toString() {
+//        return "Category{" +
+//                "objectMapper=" + objectMapper +
+//                ", id=" + id +
+//                ", categoryName='" + categoryName + '\'' +
+//                ", sequence=" + sequence +
+//                ", parentCategoryId='" + parentCategoryId + '\'' +
+//                ", description='" + description + '\'' +
+//                ", createTime=" + createTime +
+//                ", updateTime=" + updateTime +
+//                ", deleteFlag=" + deleteFlag +
+//                '}';
+//    }
 }

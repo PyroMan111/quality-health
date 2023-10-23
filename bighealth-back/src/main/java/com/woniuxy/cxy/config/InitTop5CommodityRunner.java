@@ -1,8 +1,10 @@
 package com.woniuxy.cxy.config;
 
+import com.woniuxy.cxy.entity.Category;
 import com.woniuxy.cxy.entity.Commodity;
 import com.woniuxy.cxy.redisConstant.RedisConstant;
 import com.woniuxy.cxy.repository.CommodityRepository;
+import com.woniuxy.cxy.service.ICategoryService;
 import com.woniuxy.cxy.service.ICommodityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -34,6 +36,10 @@ public class InitTop5CommodityRunner implements CommandLineRunner {
     private RedisTemplate redisTemplate;
     @Autowired
     private ICommodityService commodityService;
+
+    @Autowired
+    private ICategoryService categoryService;
+
     @Autowired
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
 
@@ -58,6 +64,14 @@ public class InitTop5CommodityRunner implements CommandLineRunner {
             redisTemplate.opsForHash().put("stock", commodity.getId().toString(), commodity.getStock());
 
         });
+
+////        /**将所有品类写入redis缓存*/
+//////        查询所有品类
+//        List<Category> categoryList = categoryService.list();
+//        categoryList.forEach(category -> {
+//            redisTemplate.opsForList().leftPush("categories:" + category.getId(), category);
+//        });
+
     }
 
 //    @Override

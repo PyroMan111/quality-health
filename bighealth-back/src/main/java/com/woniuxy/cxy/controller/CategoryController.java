@@ -73,7 +73,7 @@ public class CategoryController {
      * 新增
      */
     @PostMapping("/add")
-    @CacheEvict(cacheNames = "categories",allEntries = true)
+    @CacheEvict(cacheNames = "saved_categories",allEntries = true)
     public Result saveOrUpdate(@RequestBody Category category) {
 
         return Result.ok(categoryService.saveOrUpdate(category));
@@ -85,6 +85,7 @@ public class CategoryController {
      * 查询所有品类（id和类名）
      */
     @GetMapping("/findAllCategoryName")
+//    @Cacheable(cacheNames = "categoryName_list")
     @Cacheable(cacheNames = "categoryName_list")
     public Result findAllCategory() {
         List list = categoryService.findCategoryNames();
