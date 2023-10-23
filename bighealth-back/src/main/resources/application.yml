@@ -4,7 +4,7 @@ spring:
   datasource:
     # druid 连接池的配置
     druid:
-      url: jdbc:mysql://localhost:3306/bighealth?characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+      url: jdbc:mysql://192.168.80.9:3306/bighealth?characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
       username: root
       password: root
       driver-class-name: com.mysql.jdbc.Driver
@@ -28,6 +28,13 @@ spring:
   elasticsearch:
     rest:
       uris: http://192.168.80.9:9200
+
+  rabbitmq:
+    host: 192.168.80.9
+    port: 5672
+    username: admin
+    password: 123
+    virtual-host: /wnxy
 
 
 

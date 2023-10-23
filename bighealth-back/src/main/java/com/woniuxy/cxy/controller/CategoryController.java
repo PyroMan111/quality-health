@@ -57,7 +57,7 @@ public class CategoryController {
      * 查询所有商品类别
      */
     @GetMapping("/findAll")
-    public Result findCategories(@RequestParam(defaultValue = "1") Integer pageNum,
+    public Result<IPage> findCategories(@RequestParam(defaultValue = "1") Integer pageNum,
                                  @RequestParam(defaultValue = "5") Integer pageSize) {
 //        List<Category> list = categoryService.getBaseMapper().selectList(null);
 //        List<Category> list = categoryService.findAll();
@@ -82,7 +82,7 @@ public class CategoryController {
      */
     @GetMapping("/findAllCategoryName")
     public Result findAllCategory() {
-        List list = categoryService.findAllCategoryName();
+        List list = categoryService.findCategoryNames();
         return Result.ok(list);
     }
 

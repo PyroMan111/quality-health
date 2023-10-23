@@ -1,14 +1,14 @@
 package com.woniuxy.cxy.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.woniuxy.cxy.dto.CategoryDto;
 import com.woniuxy.cxy.entity.Category;
 import com.woniuxy.cxy.mapper.CategoryMapper;
+import com.woniuxy.cxy.redisConstant.RedisConstant;
 import com.woniuxy.cxy.service.ICategoryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.stream.Collectors;
 //import org.springframework.data.redis.core.RedisTemplate;
 
 /**
@@ -35,7 +35,36 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @Autowired
     private CategoryMapper categoryMapper;
 
-    //    @Cacheable(cacheNames = "categories", key = " '_' + #pageNum + '_' + #pageSize")
+    public List<Category> findAllCategoryName() {
+
+        LambdaQueryWrapper<Category> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(Category::getId, Category::getCategoryName);
+
+        return categoryMapper.selectList(wrapper);
+
+    }
+    @Override
+    public List<CategoryDto> findCategoryNames() {
+
+//        判断：若redis中无此key，则查数据库
+        if (!redisTemplate.hasKey(RedisConstant.CATEGORY_LIST)) {
+
+            //查询数据库
+            List<Category> list = baseMapper.selectList(null);
+            List<CategoryDto> result = list.stream().map(category ->
+                    new CategoryDto(category.getId(), category.getCategoryName())).collect(Collectors.toList());
+//            查询结果放入redis
+            redisTemplate.opsForList().leftPushAll(RedisConstant.CATEGORY_LIST, result);
+            return result;
+        }
+//        从redis中获取数据
+//        List resultList = redisTemplate.opsForList().range(RedisConstant.BOOK_TYPE_LIST, 0, -1);
+        List resultList = redisTemplate.opsForList().range(RedisConstant.CATEGORY_LIST, 0, -1);
+
+        return resultList;
+    }
+
+//        @Cacheable(cacheNames = "categories", key = " '_' + #pageNum + '_' + #pageSize")
 //    @Override
 //    public IPage<Category> search(Map<String, Object> condition, Integer pageNum, Integer pageSize) {
 //        // 构造LambdaQueryWrapper
@@ -97,14 +126,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 //        return list;
 //    }
 
-    public List<Category> findAllCategoryName() {
 
-        LambdaQueryWrapper<Category> wrapper = new LambdaQueryWrapper<>();
-        wrapper.select(Category::getId, Category::getCategoryName);
-
-        return categoryMapper.selectList(wrapper);
-
-    }
 
 
 }

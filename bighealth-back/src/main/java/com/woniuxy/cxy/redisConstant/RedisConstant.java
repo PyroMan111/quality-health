@@ -3,8 +3,9 @@ package com.woniuxy.cxy.redisConstant;
 public interface RedisConstant {
 
     //
-    String BOOK_TYPE_LIST = "bookType:list";
-    String BOOK_LIST = "book:list";
+    String CATEGORY_LIST = "category:list";
+    String COMMODITY_LIST = "commodity:list";
+
     String USER_TOKEN_PREFIX = "user_token_";
     String USER_CART_PREFIX = "user_cart_";
 

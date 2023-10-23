@@ -65,14 +65,13 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
     }
 
     @Override
-    public List<Commodity> AdvancedQuery(CommodityAdvancedQueryVo advancedQueryVo) {
+    public PageVo<Commodity> AdvancedQuery(Integer pageNum, Integer pageSize, CommodityAdvancedQueryVo advancedQueryVo) {
         LambdaQueryWrapper<Commodity> wrapper = new LambdaQueryWrapper<>();
 
-
-        // 设置查询条件  
+        // 设置查询条件
         if (advancedQueryVo.getName() != null) {
             wrapper.like(Commodity::getName, advancedQueryVo.getName());
-
+            System.out.println("wrapper = " + wrapper);
         }
         if (advancedQueryVo.getCategoryId() != null) {
             wrapper.eq(Commodity::getCategoryId, advancedQueryVo.getCategoryId());
@@ -89,8 +88,9 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
         if (advancedQueryVo.getHighPrice() != null) {
             wrapper.le(Commodity::getPrice, advancedQueryVo.getHighPrice().doubleValue());
         }
+        Page<Commodity> page = commodityMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
 
-        return commodityMapper.selectList(wrapper);
+        return new PageVo(page.getRecords(), page.getTotal());
     }
 
     @Override
@@ -109,13 +109,17 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
         NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
         builder.withQuery(QueryBuilders.multiMatchQuery(keyword, "name", "title", "subhead", "details"));
         builder.withPageable(PageRequest.of(pageNum - 1, pageSize));
-        // 设置高亮
 
+        // 设置高亮
         HighlightBuilder.Field[] fields = new HighlightBuilder.Field[1];
         fields[0] = new HighlightBuilder.Field("name")
                 .preTags("<span style='background-color:Crimson; color:White'>")
                 .postTags("</span>");
+
         builder.withHighlightFields(fields);
+
+
+
         // 执行搜索
         SearchHits<Commodity> searchHits = elasticsearchRestTemplate.search(builder.build(), Commodity.class);
         // 处理结果

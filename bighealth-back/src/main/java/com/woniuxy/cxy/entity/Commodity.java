@@ -29,7 +29,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Setter
 @TableName("h_commodity")
 @ApiModel(value = "Commodity对象", description = "")
-@Document(indexName = "CommodityList")
+@Document(indexName = "commodity_list")
 public class Commodity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,14 +46,17 @@ public class Commodity implements Serializable {
 
     @Field(type = FieldType.Integer)
     private Integer subcategoryId;
-    @Field(type = FieldType.Keyword)
+    @Field
     private String img;
     @Field(analyzer = "ik_max_word", type = FieldType.Text)
     private String title;
+
     @Field(type = FieldType.Integer)
     private Integer weight;
+
     @Field(analyzer = "ik_smart", type = FieldType.Text)
     private String subhead;
+
     @Field(type = FieldType.Integer)
     private Integer sequence;
     @Field(type = FieldType.Keyword)
@@ -76,5 +79,27 @@ public class Commodity implements Serializable {
     @TableLogic
     private Integer deleteFlag;
 
-
+    @Override
+    public String toString() {
+        return "Commodity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", categoryId=" + categoryId +
+                ", subcategoryId=" + subcategoryId +
+                ", img='" + img + '\'' +
+                ", title='" + title + '\'' +
+                ", weight=" + weight +
+                ", subhead='" + subhead + '\'' +
+                ", sequence=" + sequence +
+                ", code='" + code + '\'' +
+                ", stock=" + stock +
+                ", stockAlert=" + stockAlert +
+                ", price=" + price +
+                ", details='" + details + '\'' +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", deleteFlag=" + deleteFlag +
+                '}';
+    }
 }

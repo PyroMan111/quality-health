@@ -24,7 +24,8 @@ public interface ICommodityService extends IService<Commodity> {
 
     PageVo<Commodity> findAll(Integer pageNum, Integer pageSize);
 
-    List<Commodity> AdvancedQuery(CommodityAdvancedQueryVo advancedQueryVo);
+
+    PageVo<Commodity> AdvancedQuery(Integer pageNum, Integer pageSize, CommodityAdvancedQueryVo advancedQueryVo);
 
     PageVo<Commodity> findAllCommodityByName(Integer pageNum, Integer pageSize, String name);
 
