@@ -22,6 +22,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -69,25 +70,50 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
         LambdaQueryWrapper<Commodity> wrapper = new LambdaQueryWrapper<>();
 
         // 设置查询条件
-        if (advancedQueryVo.getName() != null) {
-            wrapper.like(Commodity::getName, advancedQueryVo.getName());
-            System.out.println("wrapper = " + wrapper);
-        }
-        if (advancedQueryVo.getCategoryId() != null) {
-            wrapper.eq(Commodity::getCategoryId, advancedQueryVo.getCategoryId());
-        }
-        if (advancedQueryVo.getStatus() != null) {
-            wrapper.eq(Commodity::getStatus, advancedQueryVo.getStatus());
-        }
-        if (advancedQueryVo.getCode() != null) {
-            wrapper.like(Commodity::getCode, advancedQueryVo.getCode());
-        }
-        if (advancedQueryVo.getLowPrice() != null) {
-            wrapper.ge(Commodity::getPrice, advancedQueryVo.getLowPrice().doubleValue());
-        }
-        if (advancedQueryVo.getHighPrice() != null) {
-            wrapper.le(Commodity::getPrice, advancedQueryVo.getHighPrice().doubleValue());
-        }
+        // 设置查询条件
+        Optional.ofNullable(advancedQueryVo.getName()).ifPresent(name ->
+                wrapper.like(Commodity::getName, name)
+        );
+
+        Optional.ofNullable(advancedQueryVo.getCategoryId()).ifPresent(categoryId ->
+                wrapper.eq(Commodity::getCategoryId, categoryId)
+        );
+
+        Optional.ofNullable(advancedQueryVo.getStatus()).ifPresent(status ->
+                wrapper.eq(Commodity::getStatus, status)
+        );
+
+        Optional.ofNullable(advancedQueryVo.getCode()).ifPresent(code ->
+                wrapper.like(Commodity::getCode, code)
+        );
+
+        Optional.ofNullable(advancedQueryVo.getLowPrice()).ifPresent(lowPrice ->
+                wrapper.ge(Commodity::getPrice, lowPrice.doubleValue())
+        );
+
+        Optional.ofNullable(advancedQueryVo.getHighPrice()).ifPresent(highPrice ->
+                wrapper.le(Commodity::getPrice, highPrice.doubleValue())
+        );
+
+//        if (advancedQueryVo.getName() != null) {
+//            wrapper.like(Commodity::getName, advancedQueryVo.getName());
+//            System.out.println("wrapper = " + wrapper);
+//        }
+//        if (advancedQueryVo.getCategoryId() != null) {
+//            wrapper.eq(Commodity::getCategoryId, advancedQueryVo.getCategoryId());
+//        }
+//        if (advancedQueryVo.getStatus() != null) {
+//            wrapper.eq(Commodity::getStatus, advancedQueryVo.getStatus());
+//        }
+//        if (advancedQueryVo.getCode() != null) {
+//            wrapper.like(Commodity::getCode, advancedQueryVo.getCode());
+//        }
+//        if (advancedQueryVo.getLowPrice() != null) {
+//            wrapper.ge(Commodity::getPrice, advancedQueryVo.getLowPrice().doubleValue());
+//        }
+//        if (advancedQueryVo.getHighPrice() != null) {
+//            wrapper.le(Commodity::getPrice, advancedQueryVo.getHighPrice().doubleValue());
+//        }
         Page<Commodity> page = commodityMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
 
         return new PageVo(page.getRecords(), page.getTotal());
@@ -117,7 +143,6 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
                 .postTags("</span>");
 
         builder.withHighlightFields(fields);
-
 
 
         // 执行搜索

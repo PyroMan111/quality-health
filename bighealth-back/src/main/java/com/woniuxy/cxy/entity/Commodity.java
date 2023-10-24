@@ -53,10 +53,8 @@ public class Commodity implements Serializable {
 
     @Field(type = FieldType.Integer)
     private Integer weight;
-
     @Field(analyzer = "ik_smart", type = FieldType.Text)
     private String subhead;
-
     @Field(type = FieldType.Integer)
     private Integer sequence;
     @Field(type = FieldType.Keyword)

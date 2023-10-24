@@ -64,8 +64,8 @@ public class CommodityController {
 
     //@Cacheable(cacheNames = "historical_advanced_query")
     @PostMapping("AdvancedQuery")
-    public Result findAll(@RequestBody CommodityAdvancedQueryVo advancedQuery) {
-        PageVo page = commodityService.AdvancedQuery(advancedQuery.getPageNum(),advancedQuery.getPageSize(), advancedQuery);
+    public Result findAll(@RequestBody CommodityAdvancedQueryVo advancedQueryVo) {
+        PageVo page = commodityService.AdvancedQuery(advancedQueryVo.getPageNum(),advancedQueryVo.getPageSize(), advancedQueryVo);
         return Result.ok(page);
     }
 
@@ -118,7 +118,7 @@ public class CommodityController {
             String keyword,
             @RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "5") Integer pageSize) {
-// 调用service查询索引库
+        // 调用service查询索引库
         Map<String, Object> result = commodityService.search(keyword, pageNum, pageSize);
         return Result.ok(result);
     }
