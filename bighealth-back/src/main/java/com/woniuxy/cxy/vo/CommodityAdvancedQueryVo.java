@@ -18,4 +18,6 @@ public class CommodityAdvancedQueryVo {
     private String code;
     private BigDecimal lowPrice;
     private BigDecimal highPrice;
+    private Integer pageNum;
+    private Integer pageSize;
 }

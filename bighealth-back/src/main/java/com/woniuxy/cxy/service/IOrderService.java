@@ -2,6 +2,8 @@ package com.woniuxy.cxy.service;
 
 import com.woniuxy.cxy.entity.Order;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.woniuxy.cxy.vo.CartVo;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -13,4 +15,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IOrderService extends IService<Order> {
 
+    @Transactional
+    void submitOrder(Integer userId, Integer addressId, CartVo cartVo, String orderNum);
 }

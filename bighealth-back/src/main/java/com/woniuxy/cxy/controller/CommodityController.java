@@ -62,12 +62,10 @@ public class CommodityController {
     }
 
 
-    @Cacheable(cacheNames = "historical_advanced_query")
+    //@Cacheable(cacheNames = "historical_advanced_query")
     @PostMapping("AdvancedQuery")
-    public Result findAll(@RequestParam(defaultValue = "1") Integer pageNum,
-                          @RequestParam(defaultValue = "5") Integer pageSize, @RequestBody CommodityAdvancedQueryVo advancedQuery) {
-        PageVo page = commodityService.AdvancedQuery(pageNum,
-                pageSize, advancedQuery);
+    public Result findAll(@RequestBody CommodityAdvancedQueryVo advancedQuery) {
+        PageVo page = commodityService.AdvancedQuery(advancedQuery.getPageNum(),advancedQuery.getPageSize(), advancedQuery);
         return Result.ok(page);
     }
 
