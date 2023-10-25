@@ -38,7 +38,8 @@ public class Commodity implements Serializable {
     @Id
     private Long id;
     // 指定es的分词器与字段类型(json的key的类型)
-    @Field(analyzer = "ik_max_word", type = FieldType.Text)
+//    @Field(analyzer = "ik_max_word", type = FieldType.Text)
+    @Field(analyzer = "ik_smart", type = FieldType.Text)
     private String name;
 
     @Field(type = FieldType.Integer)
@@ -65,7 +66,8 @@ public class Commodity implements Serializable {
     private Integer stockAlert;
     @Field(type = FieldType.Double)
     private BigDecimal price;
-    @Field(analyzer = "ik_smart", type = FieldType.Text)
+//    @Field(analyzer = "ik_smart", type = FieldType.Text)
+    @Field(analyzer = "ik_max_word", type = FieldType.Text)
     private String details;
     @Field(type = FieldType.Integer)
     private Integer status;

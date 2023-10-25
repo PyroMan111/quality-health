@@ -144,7 +144,6 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
 
         builder.withHighlightFields(fields);
 
-
         // 执行搜索
         SearchHits<Commodity> searchHits = elasticsearchRestTemplate.search(builder.build(), Commodity.class);
         // 处理结果
@@ -167,5 +166,8 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
         map.put("total", searchHits.getTotalHits());
         return map;
     }
+
+
+
 
 }

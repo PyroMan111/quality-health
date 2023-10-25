@@ -26,4 +26,5 @@ public class OrderQueryVo {
 
     private Integer pageNum;
     private Integer pageSize;
+
 }

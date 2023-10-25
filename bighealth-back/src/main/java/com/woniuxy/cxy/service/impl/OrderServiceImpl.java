@@ -1,9 +1,7 @@
 package com.woniuxy.cxy.service.impl;
 
-import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.woniuxy.cxy.entity.Commodity;
@@ -13,6 +11,7 @@ import com.woniuxy.cxy.mapper.*;
 import com.woniuxy.cxy.model.vo.PageVo;
 import com.woniuxy.cxy.service.IOrderService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.woniuxy.cxy.vo.OrderItemVo;
 import com.woniuxy.cxy.vo.OrderQueryVo;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +23,10 @@ import org.springframework.stereotype.Service;
 //import com.woniuxy.cxy.mapper.BookMapper;
 import com.woniuxy.cxy.mapper.ItemMapper;
 import com.woniuxy.cxy.mapper.OrderMapper;
-import com.woniuxy.cxy.vo.CartVo;
 import org.redisson.api.RedissonClient;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -60,7 +57,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     /**
      * 条件查询及分页
-     * 根據订单编号模糊查询、用户账号模糊查询、精确订单状态查询
+     * 根据订单编号模糊查询、用户账号模糊查询、精确订单状态查询
      * SELECT * FROM h_order  WHERE order_number like '%3665%' and user_id like '%3%' and state = '1'
      */
 
@@ -88,6 +85,81 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
         Page<Order> page = baseMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
         return new PageVo(page.getRecords(), page.getTotal());
+    }
+
+    @Override
+    public PageVo findAll(Integer pageNum, Integer pageSize) {
+        LambdaQueryWrapper<Order> wrapper = Wrappers.lambdaQuery(Order.class);
+        // 在这里可以根据需要添加查询条件，比如wrapper.like(StringUtils.hasText(name), Category::getName, name);
+
+        Page<Order> page = baseMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+        return new PageVo(page.getRecords(), page.getTotal());
+    }
+
+
+//    订单是用户端处理了接受到的，下面要查看某笔订单里的OrderItem
+
+
+    /**
+     * 查看某笔订单有哪些OrderItem
+     */
+    @Override
+    public List<OrderItemVo> findItemByOrderId(Long id) {
+        //        确定此订单为非失效
+        LambdaQueryWrapper<Order> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .eq(Order::getId, id)
+                .ne(Order::getState, 0);
+
+        Order order = orderMapper.selectOne(queryWrapper);
+        if (order == null) {
+            return null;
+        }
+
+        // 创建查询条件
+        QueryWrapper<Item> wrapper = new QueryWrapper<>();
+        wrapper.eq("order_id", id);
+
+
+        // 执行查询
+        List<Item> itemList = itemMapper.selectList(wrapper);
+
+        // 转换结果为OrderItemVo对象列表
+        List<OrderItemVo> orderItemVoList = new ArrayList<>();
+        for (Item item : itemList) {
+            OrderItemVo orderItemVo = new OrderItemVo();
+            orderItemVo.setId(item.getId());
+            orderItemVo.setName(item.getCommodityName());
+
+            /**根据Item项找这个商品的图片*/
+
+            orderItemVo.setImg(findImgByCommodityId(item.getCommodityId())); // TODO: 根据需要设置图片字段
+
+            orderItemVo.setBcount(item.getBcount());
+            orderItemVo.setSumprice(item.getSumprice());
+            orderItemVoList.add(orderItemVo);
+        }
+        return orderItemVoList;
+    }
+
+    // 定义一个新的方法来获取商品图片
+    @Override
+    public String findImgByCommodityId(Long id) {
+
+        // 创建查询条件
+
+        QueryWrapper<Commodity> wrapper = new QueryWrapper<>();
+
+        wrapper.eq("id", id);
+
+        // 执行查询
+
+        Commodity commodity = commodityMapper.selectOne(wrapper);
+
+        // 返回商品图片，如果没有找到则返回空字符串
+
+        return commodity != null ? commodity.getImg() : "";
+
     }
 
 

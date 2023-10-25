@@ -19,5 +19,5 @@ public class OrderVO {
     private String orderStatus;//1 2 3 4
     private String receiver;//收货人
     //一个订单包含多个订单详情
-    private List<OrderItemVO> orderItem;//订单详情
+    private List<OrderItemVo> orderItem;//订单详情
 }
