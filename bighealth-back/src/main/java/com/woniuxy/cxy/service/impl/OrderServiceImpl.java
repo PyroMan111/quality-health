@@ -163,6 +163,20 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
 
+    /**统计某个订单有多少件商品*/
+    @Override
+    public Long countItemByOrderId(Long id){
+        QueryWrapper<Order> wrapper = new QueryWrapper();
+        wrapper.select("id");
+
+        Long count = orderMapper.selectCount(wrapper);
+
+        return count;
+    }
+
+
+
+
 //    @Override
 //    @Transactional
 //    public void submitOrder(Integer userId, Integer addressId, CartVo cartVo, String orderNum) {

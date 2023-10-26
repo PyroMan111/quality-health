@@ -29,6 +29,8 @@ public interface IOrderService extends IService<Order> {
     // 定义一个新的方法来获取商品图片
     String findImgByCommodityId(Long id);
 
+    Long countItemByOrderId(Long id);
+
 //    @Transactional
 //    void submitOrder(Integer userId, Integer addressId, CartVo cartVo, String orderNum);
 }
