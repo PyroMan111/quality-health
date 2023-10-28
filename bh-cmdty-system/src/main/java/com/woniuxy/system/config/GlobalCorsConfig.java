@@ -15,8 +15,8 @@ public class GlobalCorsConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         //允许哪些地址访问，用"*"表示允许所有的地址访问。
-        config.addAllowedOrigin("http://localhost:8080");
-//        config.addAllowedOrigin("*");
+//        config.addAllowedOrigin("http://localhost:8081");
+        config.addAllowedOrigin("*");
         //是否发送 Cookie
         config.setAllowCredentials(true);
         //放行哪些请求方式

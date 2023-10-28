@@ -1,6 +1,10 @@
 package com.woniuxy.cxy.controller;
 
+import com.woniuxy.cxy.common.Result;
+import com.woniuxy.cxy.service.IAftermarketService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,5 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/aftermarket")
 public class AftermarketController {
+
+    @Autowired
+    IAftermarketService aftermarketService;
+
+//    @GetMapping("page")
+//    public Result getPage(Page page){
+//
+//    }
+
 
 }
